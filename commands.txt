@@ -1,0 +1,14 @@
+Run tests using docker-compose and django manage.py:
+    docker-compose run app sh -c "python manage.py test && flake8"
+
+Build docker image using docker-compose when there is a change in dockerfile:
+    docker-compose build
+
+Create a django project:
+    docker-compose run app sh -c "django-admin.py startproject app ."
+
+Create an app inside django project:
+    docker-compose run app sh -c "python manage.py startapp core"
+
+Make django migrations files when model is changes:
+    docker-compose run app sh -c "python manage.py makemigrations core"
