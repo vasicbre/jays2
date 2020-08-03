@@ -18,6 +18,7 @@ class UserManager(BaseUserManager):
         """Creates and saves a new super user"""
         user = self.create_user(email, password, **kwargs)
         user.is_superuser = True
+        user.is_staff = True
         user.save(using=self.db)
         return user
 
@@ -31,6 +32,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     region = models.CharField(max_length=255)
     bio = models.TextField(max_length=1000, default="")
     reputation = models.IntegerField(default=0)
+    is_staff = models.BooleanField(default=False)
     # TODO: add location and profile pic
 
     class UserType(models.IntegerChoices):
