@@ -13,5 +13,8 @@ Create an app inside django project:
 Make django migrations files when model is changes:
     docker-compose run app sh -c "python manage.py makemigrations core"
 
-Start app in docker:
+Start app server in docker:
     docker-compose up
+
+Run create superuser command against running server in docker:
+    docker-compose run app sh -c "python manage.py createsuperuser"

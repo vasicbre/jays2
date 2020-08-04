@@ -28,11 +28,18 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True)
     name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    objects = UserManager()
+    USERNAME_FIELD = 'email'
+
+
+class UserProfile(models.Model):
+    """User profile details"""
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     date_of_birth = models.DateField()
     region = models.CharField(max_length=255)
     bio = models.TextField(max_length=1000, default="")
     reputation = models.IntegerField(default=0)
-    is_staff = models.BooleanField(default=False)
     # TODO: add location and profile pic
 
     class UserType(models.IntegerChoices):
@@ -41,7 +48,3 @@ class User(AbstractBaseUser, PermissionsMixin):
         INTERNAL = 3
 
     user_type = models.IntegerField(choices=UserType.choices)
-
-    objects = UserManager()
-
-    USERNAME_FIELD = 'email'
