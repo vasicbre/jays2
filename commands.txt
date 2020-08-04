@@ -12,3 +12,6 @@ Create an app inside django project:
 
 Make django migrations files when model is changes:
     docker-compose run app sh -c "python manage.py makemigrations core"
+
+Start app in docker:
+    docker-compose up
