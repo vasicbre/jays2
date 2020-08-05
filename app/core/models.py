@@ -53,9 +53,18 @@ class UserProfile(models.Model):
     user_type = models.IntegerField(choices=UserType.choices)
 
 
+class TagManager(models.Manager):
+
+    def create(self, name, **kwargs):
+        tag, _ = self.get_or_create(name=name.lower())
+        return tag
+
+
 class Tag(models.Model):
     """Tag of the thing"""
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=30, unique=True)
+
+    objects = TagManager()
 
     def __str__(self):
         return self.name
