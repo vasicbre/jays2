@@ -6,6 +6,7 @@ from thing import views
 
 router = DefaultRouter()
 router.register('tags', views.TagViewSet)
+router.register('things', views.ThingViewSet)
 
 app_name = 'thing'
 
