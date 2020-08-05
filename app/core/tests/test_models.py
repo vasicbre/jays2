@@ -92,3 +92,16 @@ class ModelTests(TestCase):
         """Test tag str representation"""
         tag = models.Tag.objects.create(name='book')
         self.assertEqual(str(tag), tag.name)
+
+    def test_create_thing(self):
+        """Test the thing string representation"""
+        tag = models.Tag.objects.create(name='book')
+        thing = models.Thing(
+            user=sample_user(),
+            title='Lord of The Rings',
+            description='Awesome LOTR book'
+        )
+        thing.save()
+        thing.tags.add(tag)
+
+        self.assertEqual(str(thing), thing.title)

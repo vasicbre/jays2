@@ -36,7 +36,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class UserProfile(models.Model):
     """User profile details"""
-    user_id = models.ForeignKey(
+    user_id = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE)
     date_of_birth = models.DateField()
@@ -68,3 +68,18 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Thing(models.Model):
+    """Things for donating"""
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+    title = models.CharField(max_length=30)
+    tags = models.ManyToManyField('Tag')
+    description = models.TextField(max_length=500)
+
+    def __str__(self):
+        return self.title
