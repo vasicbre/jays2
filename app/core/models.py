@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, \
     PermissionsMixin
+from django.conf import settings
 
 
 class UserManager(BaseUserManager):
@@ -35,7 +36,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class UserProfile(models.Model):
     """User profile details"""
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE)
     date_of_birth = models.DateField()
     region = models.CharField(max_length=255)
     bio = models.TextField(max_length=1000, default="")
@@ -48,3 +51,11 @@ class UserProfile(models.Model):
         INTERNAL = 3
 
     user_type = models.IntegerField(choices=UserType.choices)
+
+
+class Tag(models.Model):
+    """Tag of the thing"""
+    name = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.name

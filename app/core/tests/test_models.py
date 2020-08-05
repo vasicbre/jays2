@@ -1,7 +1,12 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-from core.models import UserProfile
+from core import models
 import datetime
+
+
+def sample_user(email='test@test.com', password='testpass'):
+    """Create sample user"""
+    return get_user_model().objects.create_user(email, password)
 
 
 class ModelTests(TestCase):
@@ -63,7 +68,7 @@ class ModelTests(TestCase):
             'date_of_birth': datetime.datetime(1992, 10, 27),
             'region': 'Serbia',
             'bio': 'This is a test user account',
-            'user_type': UserProfile.UserType.REGULAR,
+            'user_type': models.UserProfile.UserType.REGULAR,
         }
 
         user = get_user_model().objects.create_user(
@@ -72,8 +77,8 @@ class ModelTests(TestCase):
             name=self.test_user_name
         )
 
-        user_profile = UserProfile.objects.create(user_id=user,
-                                                  **user_profile_dict)
+        user_profile = models.UserProfile.objects.create(user_id=user,
+                                                         **user_profile_dict)
 
         self.assertEqual(user_profile.date_of_birth,
                          user_profile_dict['date_of_birth'])
@@ -82,3 +87,8 @@ class ModelTests(TestCase):
         self.assertEqual(user_profile.bio, user_profile_dict['bio'])
         self.assertEqual(user_profile.user_type,
                          user_profile_dict['user_type'])
+
+    def test_tag_str(self):
+        """Test tag str representation"""
+        tag = models.Tag.objects.create(name='book')
+        self.assertEqual(str(tag), tag.name)
