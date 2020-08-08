@@ -5,12 +5,23 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from core.models import Tag
+from core.models import Tag, Thing
 
 from thing.serializers import TagSerializer
 
 
 TAGS_URL = reverse('thing:tag-list')
+
+
+def sample_thing(user, **params):
+    """Create and return a sample thing"""
+    defaults = {
+        'title': 'Hobbit',
+        'description': 'Awesome book'
+    }
+    defaults.update(params)
+
+    return Thing.objects.create(user=user, **defaults)
 
 
 class PublicTagsApiTests(TestCase):
@@ -77,3 +88,33 @@ class PrivateTagsApiTests(TestCase):
             name=payload['name'].lower()
         )
         self.assertEqual(tags.count(), 1)
+
+    def test_retrieve_existing_tags(self):
+        """Test retrieving exiting tags"""
+        tag1 = Tag.objects.create(name='books')
+        tag2 = Tag.objects.create(name='clothes')
+
+        thing = sample_thing(self.user)
+        thing.tags.add(tag1)
+
+        res = self.client.get(TAGS_URL, {'existing': 1})
+
+        serializer1 = TagSerializer(tag1)
+        serializer2 = TagSerializer(tag2)
+
+        self.assertIn(serializer1.data, res.data)
+        self.assertNotIn(serializer2.data, res.data)
+
+    def test_retrieve_tags_unique(self):
+        """Test filtering tags return unique tags"""
+        tag1 = Tag.objects.create(name='books')
+        Tag.objects.create(name='clothes')
+
+        thing1 = sample_thing(self.user)
+        thing1.tags.add(tag1)
+
+        thing2 = sample_thing(user=self.user, title='ASD')
+        thing2.tags.add(tag1)
+
+        res = self.client.get(TAGS_URL, {'existing': 1})
+        self.assertEqual(len(res.data), 1)

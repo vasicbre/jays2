@@ -20,7 +20,14 @@ class TagViewSet(viewsets.GenericViewSet,
 
     def get_queryset(self):
         """Return ordered results"""
-        return self.queryset.order_by('-name')
+        existing = bool(
+            int(self.request.query_params.get('existing', 0))
+        )
+        queryset = self.queryset
+        if existing:
+            queryset = queryset.filter(thing__isnull=False)
+
+        return queryset.order_by('-name').distinct()
 
     def perform_create(self, serializer):
         """Create a new tag"""
