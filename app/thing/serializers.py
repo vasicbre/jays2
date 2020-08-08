@@ -29,3 +29,12 @@ class ThingSerializer(serializers.ModelSerializer):
 class ThingDetailSerializer(ThingSerializer):
     """Serialize a thing detail"""
     tags = TagSerializer(many=True, read_only=True)
+
+
+class ThingImageSerializer(serializers.ModelSerializer):
+    """Serializer for uploading images to things"""
+
+    class Meta:
+        model = Thing
+        fields = ('id', 'image')
+        read_only_fields = ('id',)

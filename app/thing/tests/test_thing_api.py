@@ -1,3 +1,8 @@
+import tempfile
+import os
+
+from PIL import Image
+
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
@@ -11,6 +16,11 @@ from thing.serializers import ThingSerializer, ThingDetailSerializer
 
 
 THINGS_URL = reverse('thing:thing-list')
+
+
+def image_upload_url(thing_id):
+    """Return url from thing image upload"""
+    return reverse('thing:thing-upload-image', args=[thing_id])
 
 
 def detail_thing_url(thing_id):
@@ -173,3 +183,38 @@ class PrivateThingApiTests(TestCase):
         self.assertEqual(thing.title, payload['title'])
         tags = thing.tags.all()
         self.assertEqual(len(tags), 0)
+
+
+class ThingImageUploadTests(TestCase):
+
+    def setUp(self):
+        self.client = APIClient()
+        self.user = get_user_model().objects.create_user(
+            'test@test.com',
+            'testpass'
+        )
+        self.client.force_authenticate(self.user)
+        self.thing = sample_thing(user=self.user)
+
+    def tearDown(self):
+        self.thing.image.delete()
+
+    def test_upload_image_to_thing(self):
+        """Test uploading an image to thing"""
+        url = image_upload_url(self.thing.id)
+        with tempfile.NamedTemporaryFile(suffix='.jpg') as ntf:
+            img = Image.new('RGB', (10, 10))
+            img.save(ntf, format='JPEG')
+            ntf.seek(0)
+            res = self.client.post(url, {'image': ntf}, format='multipart')
+
+        self.thing.refresh_from_db()
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertIn('image', res.data)
+        self.assertTrue(os.path.exists(self.thing.image.path))
+
+    def test_upload_image_bad_request(self):
+        """Test uploading an invalid image"""
+        url = image_upload_url(self.thing.id)
+        res = self.client.post(url, {'image': 'notimage'}, format='multipart')
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
