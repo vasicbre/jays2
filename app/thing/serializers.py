@@ -24,3 +24,8 @@ class ThingSerializer(serializers.ModelSerializer):
         model = Thing
         fields = ('id', 'title', 'tags', 'description')
         read_only_fields = ('id',)
+
+
+class ThingDetailSerializer(ThingSerializer):
+    """Serialize a thing detail"""
+    tags = TagSerializer(many=True, read_only=True)
