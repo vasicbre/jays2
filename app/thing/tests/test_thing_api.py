@@ -132,3 +132,43 @@ class PrivateThingApiTests(TestCase):
         self.assertEqual(tags.count(), 2)
         self.assertIn(tag1, tags)
         self.assertIn(tag2, tags)
+
+    def test_partial_update_thing(self):
+        """Test updating a thing with patch"""
+        thing = sample_thing(user=self.user)
+        thing.tags.add(sample_tag())
+
+        new_tag = sample_tag(name='etf')
+
+        payload = {
+            'title': 'Book1',
+            'tags': [new_tag.id],
+        }
+
+        url = detail_thing_url(thing.id)
+        res = self.client.patch(url, payload)
+
+        thing.refresh_from_db()
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(thing.title, payload['title'])
+        tags = thing.tags.all()
+        self.assertEqual(len(tags), 1)
+        self.assertIn(new_tag, tags)
+
+    def test_full_update_thing(self):
+        """Test updating a thing with put"""
+        thing = sample_thing(user=self.user)
+        thing.tags.add(sample_tag())
+
+        payload = {
+            'title': 'Book2',
+            'description': 'asd'
+        }
+
+        url = detail_thing_url(thing.id)
+        self.client.put(url, payload)
+
+        thing.refresh_from_db()
+        self.assertEqual(thing.title, payload['title'])
+        tags = thing.tags.all()
+        self.assertEqual(len(tags), 0)
