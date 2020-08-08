@@ -60,16 +60,17 @@ class PrivateThingApiTests(TestCase):
 
     def test_retrieve_things(self):
         """Test retrieving a list of things"""
-        sample_thing(user=self.user)
         sample_thing(user=self.user, **{'title': 'Title2'})
+        sample_thing(user=self.user)
 
         res = self.client.get(THINGS_URL)
 
-        things = Thing.objects.all()
+        things = Thing.objects.all().order_by('-id')
         serializer = ThingSerializer(things, many=True)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(res.data, serializer.data)
+        self.assertEqual(len(res.data), 2)
+        self.assertEqual(serializer.data, res.data)
 
     def test_things_limited_to_user(self):
         """Test retrieving things for user"""
