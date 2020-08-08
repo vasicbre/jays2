@@ -99,3 +99,36 @@ class PrivateThingApiTests(TestCase):
 
         serializer = ThingDetailSerializer(thing)
         self.assertEqual(res.data, serializer.data)
+
+    def test_create_basic_thing(self):
+        """Test creating thing"""
+        payload = {
+            'title': 'Book1',
+            'description': 'Awesome book 1'
+        }
+
+        res = self.client.post(THINGS_URL, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        thing = Thing.objects.get(id=res.data['id'])
+        for key in payload.keys():
+            self.assertEqual(payload[key], getattr(thing, key))
+
+    def test_create_thing_with_tags(self):
+        """Test creating a thing with tags"""
+        tag1 = sample_tag('book')
+        tag2 = sample_tag('etf')
+
+        payload = {
+            'title': 'Book1',
+            'description': 'Awesome book 1',
+            'tags': [tag1.id, tag2.id],
+        }
+        res = self.client.post(THINGS_URL, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        thing = Thing.objects.get(id=res.data['id'])
+        tags = thing.tags.all()
+        self.assertEqual(tags.count(), 2)
+        self.assertIn(tag1, tags)
+        self.assertIn(tag2, tags)

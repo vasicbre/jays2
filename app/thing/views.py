@@ -42,3 +42,7 @@ class ThingViewSet(viewsets.ModelViewSet):
             return serializers.ThingDetailSerializer
 
         return serializers.ThingSerializer
+
+    def perform_create(self, serializer):
+        """Create a new thing"""
+        serializer.save(user=self.request.user)
