@@ -218,3 +218,26 @@ class ThingImageUploadTests(TestCase):
         url = image_upload_url(self.thing.id)
         res = self.client.post(url, {'image': 'notimage'}, format='multipart')
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_filter_things_by_tags(self):
+        """Test returning things with specific tags"""
+        thing1 = sample_thing(user=self.user, title='Book1')
+        thing2 = sample_thing(user=self.user, title='Book2')
+        tag1 = sample_tag(name='books')
+        thing1.tags.add(tag1)
+        thing2.tags.add(tag1)
+        thing3 = sample_thing(user=self.user, title='Comb')
+        tag2 = sample_tag('self-care')
+        thing3.tags.add(tag2)
+
+        res = self.client.get(
+            THINGS_URL,
+            {'tags': f'{tag1.id}'}
+        )
+
+        serializer1 = ThingSerializer(thing1)
+        serializer2 = ThingSerializer(thing2)
+        serializer3 = ThingSerializer(thing3)
+        self.assertIn(serializer1.data, res.data)
+        self.assertIn(serializer2.data, res.data)
+        self.assertNotIn(serializer3.data, res.data)
