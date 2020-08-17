@@ -7,6 +7,7 @@ class Home extends Component {
     render() {
         let { loggedIn } = this.state;
         if (!loggedIn) {
+            this.props.history.push('/login');
             return (<Login />);
         }
     }
