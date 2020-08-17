@@ -6,12 +6,12 @@ class Login extends Component {
     constructor(props) {
         super(props)
         this.state = { matches: window.matchMedia(this.mediaQuery).matches };
-      }
+    }
     
-      componentDidMount() {
+    componentDidMount() {
         const handler = e => this.setState({matches: e.matches});
         window.matchMedia(this.mediaQuery).addListener(handler);
-      }
+    }
 
     render() {
         let output = <div className= {this.state.matches? "container w-100 mt-5" : "container w-50 mt-5" }>

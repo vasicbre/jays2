@@ -8,6 +8,12 @@ from core.models import Tag, Thing
 
 from thing import serializers
 
+from django.http import JsonResponse
+
+
+def hello(request):
+    return JsonResponse({'response_text': 'hello world!!!'})
+
 
 class TagViewSet(viewsets.GenericViewSet,
                  mixins.ListModelMixin,

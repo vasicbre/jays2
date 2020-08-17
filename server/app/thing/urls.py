@@ -11,5 +11,6 @@ router.register('things', views.ThingViewSet)
 app_name = 'thing'
 
 urlpatterns = [
-    path('', include(router.urls))
+    path('', include(router.urls)),
+    path('hello/', views.hello, name='hello'),
 ]

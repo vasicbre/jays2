@@ -3,6 +3,7 @@ import axios from 'axios';
 import Header from './Header.jsx';
 import Home from './Home.jsx';
 import Login from './Login.jsx';
+import Register from './Register.jsx';
 
 import { BrowserRouter, Route } from 'react-router-dom';
 
@@ -19,6 +20,7 @@ return(
         <div className="container">
           <Route path="/" exact={true} component={Home} />
           <Route path="/login" component={Login} />
+          <Route path="/register" component={Register} />
           </div>
       </div>
     </BrowserRouter>

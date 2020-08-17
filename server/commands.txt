@@ -1,5 +1,5 @@
 Run tests using docker-compose and django manage.py:
-    docker-compose run app sh -c "python manage.py test && flake8"
+    docker-compose run --rm app sh -c "python manage.py test && flake8"
 
 Build docker image using docker-compose when there is a change in dockerfile:
     docker-compose build
