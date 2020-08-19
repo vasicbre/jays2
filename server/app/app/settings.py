@@ -130,10 +130,19 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
-MEDIA_ROOT = '/vol/web/media'
+#MEDIA_ROOT = '/vol/web/media'
 STATIC_ROOT = '/vol/web/static'
+#STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 AUTH_USER_MODEL = 'core.User'
+
+AWS_ACCESS_KEY_ID = 'AKIA2ZOLUQA4GLEHLN5Q'
+AWS_SECRET_ACCESS_KEY = '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'
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_STORAGE_BUCKET_NAME = 'etf-master'
+AWS_S3_REGION_NAME = 'eu-central-1'
+AWS_DEFAULT_ACL = None
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = [
