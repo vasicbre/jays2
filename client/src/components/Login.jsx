@@ -8,7 +8,7 @@ class Login extends Component {
     state = { email: "", password: "" }
 
     constructor(props) {
-        super(props)
+        super(props);
         this.state = { matches: window.matchMedia(this.mediaQuery).matches };
     }
     
