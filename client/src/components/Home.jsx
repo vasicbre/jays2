@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Login from './Login';
+import AddIcon from './AddIcon';
 
 class Home extends Component {
 
@@ -9,8 +10,9 @@ class Home extends Component {
             this.props.history.push('/login');
             return (<Login />);
         } else {
-            return <div>
+            return <div className="container">
                 <h1>Home</h1>
+                <AddIcon />
             </div>
         }
     }
