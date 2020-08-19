@@ -56,7 +56,6 @@ class Register extends Component {
         }
 
         if (formIsValid) {
-            console.log('register');
             var bodyFormData = new FormData();
             bodyFormData.set('email',this.state.email);
             bodyFormData.set('name', this.state.name);
@@ -79,7 +78,7 @@ class Register extends Component {
 
     render() {
         let output = <div className= {this.state.matches? "container w-100 mt-5" : "container w-50 mt-5" }>
-            <form onSubmit= {this.registerSubmit.bind(this)}>
+            <form onSubmit={this.registerSubmit.bind(this)}>
                 <div className="form-group">
                     <input type="text" className="form-control" id="nameInput" onChange={this.handleNameChange.bind(this)} placeholder="Ime"/>
                 </div>
@@ -91,6 +90,9 @@ class Register extends Component {
                 </div>
                 <div className="form-group">
                     <input type="password" className="form-control" id="passInput2" onChange={this.handlePassword2Change.bind(this)} placeholder="Potvrdi lozinku"/>
+                </div>
+                <div className="form-group">
+                    <a href="" onClick={()=>this.props.history.push('/login')}>Imate nalog? Ulogujte se</a>
                 </div>
                 <button type="submit" className="btn btn-primary">Registruj se</button>
             </form>
