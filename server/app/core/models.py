@@ -5,14 +5,20 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, \
     PermissionsMixin
 from django.conf import settings
+from django.utils.timezone import now
 
 
 def thing_image_file_path(instance, filename):
     """Generate file path for new thing image"""
-    ext = filename.split('.')[-1]
-    filename = f'{uuid.uuid4()}.{ext}'
+    # ext = filename.split('.')[-1]
+    # filename = f'{uuid.uuid4()}.{ext}'
 
-    return os.path.join('uploads/thing/', filename)
+    # return os.path.join('uploads/thing/', filename)
+    filename_base, filename_ext = os.path.splitext(filename)
+    return 'posts/%s/%s' % (
+        now().strftime("%Y%m%d"),
+        instance.id
+    )
 
 
 class UserManager(BaseUserManager):
@@ -95,6 +101,7 @@ class Thing(models.Model):
 
     def __str__(self):
         return self.title
+
 
 class Photo(models.Model):
     uuid = models.UUIDField(

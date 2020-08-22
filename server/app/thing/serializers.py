@@ -22,7 +22,7 @@ class ThingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Thing
-        fields = ('id', 'title', 'tags', 'description')
+        fields = ('id', 'title', 'tags', 'description', 'image')
         read_only_fields = ('id',)
 
 

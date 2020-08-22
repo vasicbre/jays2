@@ -1,6 +1,6 @@
 .sticky-bottom-right {
     font-weight: bold;
-    position: absolute;
-    right: 0;
+    position: fixed;
     bottom: 0;
+    right: 0;
   }

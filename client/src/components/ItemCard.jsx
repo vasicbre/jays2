@@ -9,11 +9,11 @@ const ItemCard = ({item, history}) => {
 
     return <div className="col-md-4">
         <div className="card mt-1" onClick={ ()=> getItemDetails(item.id) }>
+            <img src={item.image} alt="" className="card-img-top" />
             <div className="card-body">
                 <h5 className="card-title">{item.title}</h5>
                 <p className="card-text">{item.description}</p>
             </div>
-            <img src="" alt="" className="card-img-top" />
         </div>
     </div>;
 };

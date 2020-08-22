@@ -6,7 +6,8 @@ import ItemList from './ItemList';
 class Home extends Component {
 
     render() {
-        const loggedIn = localStorage.getItem('token') != '';
+        const loggedIn = localStorage.getItem('token') !== null;
+        console.log(loggedIn);
         if (!loggedIn) {
             this.props.history.push('/login');
             return (<Login />);

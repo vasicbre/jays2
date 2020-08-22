@@ -14,7 +14,7 @@ class AddIcon extends Component {
 
     render() {
         return <div>
-            <button type="submit" onClick={this.clickHandler.bind(this)} className="btn btn-primary float-right rounded-circle btn-lg mb-4 mr-4 sticky-bottom-right">
+            <button type="submit" onClick={this.clickHandler.bind(this)} className="btn btn-primary rounded-circle btn-lg mb-4 mr-4 sticky-bottom-right">
                 <span>+</span>
             </button>
         </div>

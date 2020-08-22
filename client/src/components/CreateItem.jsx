@@ -5,7 +5,7 @@ import axios from 'axios';
 class CreateItem extends Component {
     mediaQuery = "(max-width: 450px)";
 
-    state = { name: "", description: "" }
+    state = { name: "", description: "", image: null }
 
     constructor(props) {
         super(props)
@@ -17,11 +17,28 @@ class CreateItem extends Component {
         window.matchMedia(this.mediaQuery).addListener(handler);
     }
 
+    validateForm() {
+        if (!this.state.name) {
+            return false;
+        }
+        if (!this.state.description) {
+            return false;
+        }
+        if (!this.state.image) {
+            return false;
+        }
+    }
+
     createSubmit(e) {
         e.preventDefault();
+        if (!this.validateForm()) {
+            alert("Molimo Vas da popunite sva polja");
+            return;
+        }
         var bodyFormData = new FormData();
-        bodyFormData.set('name',this.state.name);
+        bodyFormData.set('title',this.state.name);
         bodyFormData.set('description', this.state.description);
+        bodyFormData.set('image', this.state.image);
         axios.defaults.headers.common['Authorization'] = localStorage.getItem('token');
         axios({
             method: "post",
@@ -48,6 +65,11 @@ class CreateItem extends Component {
         this.setState({description: e.target.value});
     }
 
+    handleImageChange(e) {
+        console.log(e.target.files);
+        this.setState({image: e.target.files[0]});
+    }
+
     render() {
         let output = <div className= {this.state.matches? "container w-100 mt-5" : "container w-50 mt-5" }>
             <form onSubmit={this.createSubmit.bind(this)}>
@@ -58,7 +80,7 @@ class CreateItem extends Component {
                     <textarea type="text" className="form-control" id="textInput" onChange={this.handleDescriptionChange.bind(this)} placeholder="Opis"/>
                 </div>
                 <div className="form-group">
-                    <input className="form-control-file" type="file" name="itemImage" onChange={this.onImageChange} />
+                    <input className="form-control-file" type="file" name="itemImage" onChange={this.handleImageChange.bind(this)} />
                 </div>
                 <button type="submit" className="btn btn-primary">Kreiraj</button>
             </form>

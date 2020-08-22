@@ -17,7 +17,7 @@ class ItemList extends Component {
     }
 
     fetchItems = () => {
-        axios.defaults.headers.common['Authorization'] = localStorage.getItem('token');
+        axios.defaults.headers.common['Authorization'] = `Token ${localStorage.getItem('token')}`;
         axios({
             method: "get",
             url: "http://localhost:8000/api/thing/things",
@@ -27,7 +27,8 @@ class ItemList extends Component {
             })
             .then(items => this.setState({items}))
             .catch(err => {
-                alert('Neuspešna akcija, pokušajte ponovo')
+                alert('Neuspešna akcija, pokušajte ponovo');
+                console.log(err);
             });
 
     }
