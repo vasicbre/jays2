@@ -9,12 +9,8 @@ import CreateItem from './CreateItem.jsx'
 import { BrowserRouter, Route } from 'react-router-dom';
 
 const App = props => {
-    useEffect(() => {
-      axios.get('/api/thing/hello/')
-        .then(res => setState(res.data))
-    }, [])
-const [state, setState] = useState('')
-return(
+  const [state, setState] = useState('')
+  return(
     <BrowserRouter>
       <div>
         <Header />
@@ -26,6 +22,6 @@ return(
           </div>
       </div>
     </BrowserRouter>
- )
+  )
 };
 export default App;
