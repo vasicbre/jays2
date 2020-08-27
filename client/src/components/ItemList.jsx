@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ItemCard from './ItemCard';
 import axios from 'axios';
+import {toggleNavbarActivate} from '../helpers';
 
 
 class ItemList extends Component {
@@ -12,6 +13,7 @@ class ItemList extends Component {
     }
 
     componentDidMount() {
+        toggleNavbarActivate('home');
         this.fetchItems();
     }
 
@@ -40,6 +42,7 @@ class ItemList extends Component {
             });
 
     }
+
     render() {
         const itemList = this.state.items.map((item, index) => <ItemCard item={item} key={index} />)
         return (

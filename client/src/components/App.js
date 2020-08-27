@@ -4,7 +4,8 @@ import Header from './Header.jsx';
 import Home from './Home.jsx';
 import Login from './Login.jsx';
 import Register from './Register.jsx';
-import CreateItem from './CreateItem.jsx'
+import CreateItem from './CreateItem.jsx';
+import Profile from './Profile';
 
 import { BrowserRouter, Route } from 'react-router-dom';
 
@@ -19,6 +20,7 @@ const App = props => {
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
           <Route path="/create" component={CreateItem} />
+          <Route path="/profile" component={Profile} />
           </div>
       </div>
     </BrowserRouter>

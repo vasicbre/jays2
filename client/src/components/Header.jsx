@@ -32,16 +32,26 @@ class Header extends Component {
         }
     }
 
-    handleLoginClick() {
-        if (localStorage.getItem('token') !== null) {
-            localStorage.removeItem('token');
-        }
-        this.props.history.push('/login');
+    toggleActivateStyle() {
+        this.navbarRef.current.querySelector('#home').classList.remove('active');
+        this.navbarRef.current.querySelector('#profile').classList.remove('active');
+        this.navbarRef.current.querySelector('#login').classList.remove('active');
     }
 
-    handleTogglerClick() {
-        console.log('toggler clicked', this.state.expanded);
-        
+    handleNavClick(e) {
+        this.toggleActivateStyle();
+
+        if (e.target.id == 'home') {
+            this.props.history.push('/');
+        } else if (e.target.id == 'profile') {
+            this.props.history.push('/profile');
+        } else if (e.target.id == 'login') {
+            if (localStorage.getItem('token') !== null) {
+                localStorage.removeItem('token');
+            }
+            this.props.history.push('/login');
+        }
+        this.navbarRef.current.querySelector('#toggler').click();
     }
 
     render() {
@@ -52,15 +62,15 @@ class Header extends Component {
                     <span className="navbar-toggler-icon"></span>
                 </button>
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul className="navbar-nav mr-auto">
-                        <li className="nav-item active">
-                            <a className="nav-link" href="#">Početna <span className="sr-only">(current)</span></a>
+                    <ul onClick={this.handleNavClick.bind(this)} className="navbar-nav mr-auto">
+                        <li className="nav-item">
+                            <a id="home" className="nav-link" href="#">Početna</a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="#">Profil</a>
+                            <a id="profile" className="nav-link" href="#">Profil</a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" onClick={this.handleLoginClick.bind(this)} href="#">{localStorage.getItem('token') !== null? 'Odjava' : 'Prijava'}</a>
+                            <a id="login" className="nav-link" href="#">{localStorage.getItem('token') !== null? 'Odjava' : 'Prijava'}</a>
                         </li>
                     </ul>
                     <form className="form-inline my-2 my-lg-0">

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-
 import axios from 'axios';
+import {toggleNavbarActivate} from '../helpers';
 
 class Login extends Component {
     mediaQuery = "(max-width: 450px)";
@@ -15,6 +15,7 @@ class Login extends Component {
     componentDidMount() {
         const handler = e => this.setState({matches: e.matches});
         window.matchMedia(this.mediaQuery).addListener(handler);
+        toggleNavbarActivate('login');
     }
 
     loginSubmit(e) {
@@ -28,9 +29,28 @@ class Login extends Component {
             data: bodyFormData,
             headers: {'Content-Type': 'multipart/form-data' }
             })
-            .then(response => {
+           .then(response => {
                 localStorage.setItem('token', response.data.token);
-                this.props.history.push('/');
+                return axios.get(
+                    "http://localhost:8000/api/user/profile/",
+                    { 'headers': 
+                        { 
+                            'Authorization': `Token ${response.data.token}` 
+                        }
+                    });
+            })
+            .then(response => {
+                if (response.data.date_of_birth === null) {
+                    this.props.history.push({
+                        pathname: '/profile',
+                        state: {
+                            name: response.data.user.name,
+                            email: response.data.user.email
+                        }
+                    });
+                } else {
+                    this.props.history.push('/');
+                }
             })
             .catch(err => {
                 alert('Neuspešna akcija, pokušajte ponovo');

@@ -30,6 +30,8 @@ class UserManager(BaseUserManager):
         user = self.model(email=self.normalize_email(email), **kwargs)
         user.set_password(password)
         user.save(using=self.db)
+        user_profile = UserProfile(user=user)
+        user_profile.save(using=self.db)
         return user
 
     def create_superuser(self, email, password, **kwargs):
@@ -53,12 +55,12 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class UserProfile(models.Model):
     """User profile details"""
-    user_id = models.OneToOneField(
+    user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE)
-    date_of_birth = models.DateField()
-    region = models.CharField(max_length=255)
-    bio = models.TextField(max_length=1000, default="")
+    date_of_birth = models.DateField(null=True)
+    region = models.CharField(null=True, max_length=255)
+    bio = models.TextField(null=True, max_length=1000, default="")
     reputation = models.IntegerField(default=0)
     # TODO: add location and profile pic
 
@@ -67,7 +69,9 @@ class UserProfile(models.Model):
         BUSINESS = 2
         INTERNAL = 3
 
-    user_type = models.IntegerField(choices=UserType.choices)
+    user_type = models.IntegerField(
+        choices=UserType.choices,
+        default=UserType.REGULAR)
 
 
 class TagManager(models.Manager):
@@ -107,6 +111,6 @@ class Photo(models.Model):
     uuid = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False,
     )
-    created_at = models.DateTimeField(auto_now_add=True) 
+    created_at = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=100)
     photo = models.FileField()
