@@ -21,27 +21,39 @@ class CreateItem extends Component {
 
         this.state = {
             matches: window.matchMedia(this.mediaQuery).matches,
-            tags: [
-                { id: "Thailand", text: "Thailand" },
-                { id: "India", text: "India" }
-             ],
-            suggestions: [
-                { id: 'USA', text: 'USA' },
-                { id: 'Germany', text: 'Germany' },
-                { id: 'Austria', text: 'Austria' },
-                { id: 'Costa Rica', text: 'Costa Rica' },
-                { id: 'Sri Lanka', text: 'Sri Lanka' },
-                { id: 'Thailand', text: 'Thailand' }
-             ]
+            tags: [],
+            suggestions: []
         };
         this.handleDelete = this.handleDelete.bind(this);
         this.handleAddition = this.handleAddition.bind(this);
         this.handleDrag = this.handleDrag.bind(this);
+        this.fetchTags();
     }
     
     componentDidMount() {
         const handler = e => this.setState({matches: e.matches});
         window.matchMedia(this.mediaQuery).addListener(handler);
+    }
+
+    fetchTags() {
+        axios.defaults.headers.common['Authorization'] = `Token ${localStorage.getItem('token')}`;
+        axios({
+            method: "get",
+            url: "http://localhost:8000/api/thing/tags",
+            })
+            .then(resp => {
+                const adjustedData = resp.data.map(obj => {
+                        return {
+                            id: obj.id.toString(),
+                            text: obj.name
+                        }
+                    });
+                this.setState({suggestions: adjustedData});
+            })
+            .catch(err => {
+                alert('Neuspešna akcija, pokušajte ponovo');
+                console.log(err);
+            });
     }
 
     handleDelete(i) {
