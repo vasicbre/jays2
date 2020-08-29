@@ -1,6 +1,15 @@
 import React, { Component } from 'react';
 
+import { WithContext as ReactTags } from 'react-tag-input';
+
 import axios from 'axios';
+
+const KeyCodes = {
+    comma: 188,
+    enter: 13,
+  };
+   
+  const delimiters = [KeyCodes.comma, KeyCodes.enter];
 
 class CreateItem extends Component {
     mediaQuery = "(max-width: 450px)";
@@ -8,14 +17,55 @@ class CreateItem extends Component {
     state = { name: "", description: "", image: null }
 
     constructor(props) {
-        super(props)
-        this.state = { matches: window.matchMedia(this.mediaQuery).matches };
+        super(props);
+
+        this.state = {
+            matches: window.matchMedia(this.mediaQuery).matches,
+            tags: [
+                { id: "Thailand", text: "Thailand" },
+                { id: "India", text: "India" }
+             ],
+            suggestions: [
+                { id: 'USA', text: 'USA' },
+                { id: 'Germany', text: 'Germany' },
+                { id: 'Austria', text: 'Austria' },
+                { id: 'Costa Rica', text: 'Costa Rica' },
+                { id: 'Sri Lanka', text: 'Sri Lanka' },
+                { id: 'Thailand', text: 'Thailand' }
+             ]
+        };
+        this.handleDelete = this.handleDelete.bind(this);
+        this.handleAddition = this.handleAddition.bind(this);
+        this.handleDrag = this.handleDrag.bind(this);
     }
     
     componentDidMount() {
         const handler = e => this.setState({matches: e.matches});
         window.matchMedia(this.mediaQuery).addListener(handler);
     }
+
+    handleDelete(i) {
+        const { tags } = this.state;
+        this.setState({
+         tags: tags.filter((tag, index) => index !== i),
+        });
+    }
+ 
+    handleAddition(tag) {
+        this.setState(state => ({ tags: [...state.tags, tag] }));
+    }
+ 
+    handleDrag(tag, currPos, newPos) {
+        const tags = [...this.state.tags];
+        const newTags = tags.slice();
+ 
+        newTags.splice(currPos, 1);
+        newTags.splice(newPos, 0, tag);
+ 
+        // re-render
+        this.setState({ tags: newTags });
+    }
+ 
 
     validateForm() {
         if (!this.state.name) {
@@ -71,6 +121,7 @@ class CreateItem extends Component {
     }
 
     render() {
+        const { tags, suggestions } = this.state;
         let output = <div className= {this.state.matches? "container w-100 mt-5" : "container w-50 mt-5" }>
             <form onSubmit={this.createSubmit.bind(this)}>
                 <div className="form-group">
@@ -78,6 +129,17 @@ class CreateItem extends Component {
                 </div>
                 <div className="form-group">
                     <textarea type="text" className="form-control" id="textInput" onChange={this.handleDescriptionChange.bind(this)} placeholder="Opis"/>
+                </div>
+                <div className="form-group">
+                    <ReactTags
+                        inputFieldPosition="top"
+                        tags={tags}
+                        suggestions={suggestions}
+                        handleDelete={this.handleDelete}
+                        handleAddition={this.handleAddition}
+                        handleDrag={this.handleDrag}
+                        delimiters={delimiters}
+                        placeholder = "Dodajte tag" />
                 </div>
                 <div className="form-group">
                     <input className="form-control-file" type="file" name="itemImage" onChange={this.handleImageChange.bind(this)} />
