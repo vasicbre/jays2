@@ -35,8 +35,26 @@ class UserProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     class Meta:
         model = UserProfile
-        fields = ('date_of_birth', 'region', 'bio', 'reputation', 'user')
+        fields = (
+            'date_of_birth',
+            'region',
+            'bio',
+            'reputation',
+            'user',
+            'phone')
 
+
+class UserProfilePatchSerializer(serializers.ModelSerializer):
+    """Serializer for user profile object updates"""
+
+    class Meta:
+        model = UserProfile
+        fields = (
+            'date_of_birth',
+            'region',
+            'bio',
+            'reputation',
+            'phone')
 
 class AuthTokenSerializer(serializers.Serializer):
     """Serializer for the user authentication object"""

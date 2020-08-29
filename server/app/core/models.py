@@ -62,6 +62,7 @@ class UserProfile(models.Model):
     region = models.CharField(null=True, max_length=255)
     bio = models.TextField(null=True, max_length=1000, default="")
     reputation = models.IntegerField(default=0)
+    phone = models.CharField(max_length=15, null=True)
     # TODO: add location and profile pic
 
     class UserType(models.IntegerChoices):

@@ -5,7 +5,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 from user.serializers import UserSerializer, AuthTokenSerializer, \
-    UserProfileSerializer
+    UserProfileSerializer, UserProfilePatchSerializer
 
 from core.models import UserProfile
 
@@ -42,3 +42,11 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
             .all() \
             .filter(user_id=self.request.user.id) \
             .first()
+
+    def get_serializer_class(self):
+        serializer_class = self.serializer_class
+
+        if self.request.method == 'PATCH':
+            serializer_class = UserProfilePatchSerializer
+
+        return serializer_class

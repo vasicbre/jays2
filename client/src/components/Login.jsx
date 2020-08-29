@@ -45,7 +45,8 @@ class Login extends Component {
                         pathname: '/profile',
                         state: {
                             name: response.data.user.name,
-                            email: response.data.user.email
+                            email: response.data.user.email,
+                            registration: true,
                         }
                     });
                 } else {
