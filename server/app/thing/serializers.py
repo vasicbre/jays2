@@ -35,10 +35,10 @@ class ThingSerializer(serializers.ModelSerializer):
         tag_data = validated_data.pop('tags')
         thing = Thing.objects.create(**validated_data)
         for tag in tag_data:
-            tag = Tag.objects.filter(name=tag['name']).first()
-            if not tag:
-                tag = Tag.objects.create(**tag)
-            thing.tags.add(tag)
+            tag_obj = Tag.objects.filter(name=tag['name']).first()
+            if not tag_obj:
+                tag_obj = Tag.objects.create(**tag)
+            thing.tags.add(tag_obj)
         return thing
 
 

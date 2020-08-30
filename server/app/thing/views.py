@@ -1,6 +1,8 @@
 from rest_framework import viewsets, mixins
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework import status
 
 from core.models import Tag, Thing
 from thing import serializers
@@ -8,6 +10,7 @@ from thing import serializers
 from django.http import JsonResponse
 import logging
 
+from collections import OrderedDict
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -76,7 +79,14 @@ class ThingViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         """Create a new thing"""
+        logger.info('perform_create')
+        logger.info(serializer.validated_data)
         serializer.save(user=self.request.user)
+
+    def create(self, request, *args, **kwargs):
+        logger.info('create')
+        logger.info(request.data)
+        return super().create(request, *args, **kwargs)
 
     # @action(methods=['POST'], detail=True, url_path='upload-image')
     # def upload_image(self, request, pk=None):

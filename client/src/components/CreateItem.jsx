@@ -92,32 +92,90 @@ class CreateItem extends Component {
         return true;
     }
 
+    fetchPost() {
+        const formData = new FormData();
+        let tags = this.state.tags.map(obj => {
+            return {
+                name: obj.text
+            }
+        });
+        formData.append('title',this.state.name);
+        formData.append('tags', JSON.stringify(tags));
+        formData.append('description', this.state.description);
+        formData.append('image', this.state.image);
+
+        const options = {
+            method: 'POST',
+            body: formData,
+            // If you add this, upload won't work
+            // headers: {
+            //   'Content-Type': 'multipart/form-data',
+            // }
+          };
+      
+          fetch('http://localhost:8000/api/thing/things/', options)
+          .then(response => {
+              console.log(response);
+          })
+          .catch(err => {
+              console.log(err);
+          });
+    }
+ 
     createSubmit(e) {
         e.preventDefault();
+        //this.fetchPost();
         if (!this.validateForm()) {
             alert("Molimo Vas da popunite sva polja");
             return;
         }
-        var bodyFormData = new FormData();
-        bodyFormData.set('title',this.state.name);
-        bodyFormData.set('description', this.state.description);
-        bodyFormData.set('image', this.state.image);
+        let tags = this.state.tags.map(obj => {
+            return {
+                name: obj.text
+            }
+        });
+        console.log(tags);
+        // var bodyFormData = new FormData();
+        // bodyFormData.append('title',this.state.name);
+        // tags.forEach(element => {
+        //     bodyFormData.append('tags', JSON.stringify(element));
+        // });
+        // bodyFormData.append('description', this.state.description);
+        //bodyFormData.append('image', this.state.image);
+
+        let data = {
+            title: this.state.name,
+            tags: tags,
+            description: this.state.description
+        }
+
         axios.defaults.headers.common['Authorization'] = `Token ${localStorage.getItem('token')}`;
         axios({
             method: "post",
             url: "http://localhost:8000/api/thing/things/",
-            data: bodyFormData,
-            headers: {'Content-Type': 'multipart/form-data' }
-            })
-            .then(response => {
-                console.log(response);
-                alert('Uspešno ste dodali novi artikal');
-                this.props.history.push('/');
-            })
-            .catch(err => {
-                alert('Neuspešna akcija, pokušajte ponovo');
-                console.log(err);
+            data: JSON.stringify(data),
+            headers: {'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            console.log(response.data.id);
+            let form_data = new FormData();
+            form_data.set('image', this.state.image);
+            return axios({
+                method: "patch",
+                url: "http://localhost:8000/api/thing/things/" + response.data.id + "/",
+                data: form_data,
+                headers: {'Content-Type': 'multipart/form-data' }
             });
+        })
+        .then(response => {
+            console.log(response);
+            alert('Uspešno ste dodali novi artikal');
+            this.props.history.push('/');
+        })
+        .catch(err => {
+            alert('Neuspešna akcija, pokušajte ponovo');
+            console.log(err);
+        });
     }
 
     handleNameChange(e) {
@@ -129,7 +187,6 @@ class CreateItem extends Component {
     }
 
     handleImageChange(e) {
-        console.log(e.target.files);
         this.setState({image: e.target.files[0]});
     }
 
