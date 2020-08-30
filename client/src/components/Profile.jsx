@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import {toggleNavbarActivate} from '../helpers';
-
+import ItemList from './ItemList';
 
 class Profile extends Component {
 
@@ -189,11 +189,20 @@ class Profile extends Component {
             <button type="submit" className="btn btn-primary">Sačuvaj</button>
         </form>
     }
+
+    myItems() {
+        if (this.state.profile) return <div></div>;
+        return <div>
+                <ItemList mine={true}/>
+            </div>
+    }
+
     render() {
         return <div className= {this.state.matches? "container w-100 mt-2" : "container w-50 mt-2" }>
             {this.registrationGreeting()}
             {this.navTabs()}
             {this.profileForm()}
+            {this.myItems()}
         </div>
     }
 }
