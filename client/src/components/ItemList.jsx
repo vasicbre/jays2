@@ -31,6 +31,7 @@ class ItemList extends Component {
             url: "http://localhost:8000/api/thing/things",
             })
             .then(resp => {
+                console.log(resp.data);
                 return resp.data;
             })
             .then(items => {

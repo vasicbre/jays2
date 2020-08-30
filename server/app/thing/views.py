@@ -6,6 +6,11 @@ from core.models import Tag, Thing
 from thing import serializers
 
 from django.http import JsonResponse
+import logging
+
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 
 def hello(request):

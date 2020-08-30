@@ -2,6 +2,12 @@ from rest_framework import serializers
 
 from core.models import Tag, Thing
 
+import logging
+
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
+
 
 class TagSerializer(serializers.ModelSerializer):
     """Serializer for tag objects"""
@@ -10,20 +16,30 @@ class TagSerializer(serializers.ModelSerializer):
         model = Tag
         fields = ('id', 'name')
         read_only_fields = ('id',)
+        extra_kwargs = {
+            'name': {'validators': []},
+        }
 
 
 class ThingSerializer(serializers.ModelSerializer):
     """Serializer for thing objects"""
 
-    tags = serializers.PrimaryKeyRelatedField(
-        many=True,
-        queryset=Tag.objects.all()
-    )
+    tags = TagSerializer(many=True)
 
     class Meta:
         model = Thing
         fields = ('id', 'title', 'tags', 'description', 'image')
         read_only_fields = ('id',)
+
+    def create(self, validated_data):
+        tag_data = validated_data.pop('tags')
+        thing = Thing.objects.create(**validated_data)
+        for tag in tag_data:
+            tag = Tag.objects.filter(name=tag['name']).first()
+            if not tag:
+                tag = Tag.objects.create(**tag)
+            thing.tags.add(tag)
+        return thing
 
 
 class ThingDetailSerializer(ThingSerializer):

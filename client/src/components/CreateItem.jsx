@@ -89,6 +89,7 @@ class CreateItem extends Component {
         if (!this.state.image) {
             return false;
         }
+        return true;
     }
 
     createSubmit(e) {
@@ -101,7 +102,7 @@ class CreateItem extends Component {
         bodyFormData.set('title',this.state.name);
         bodyFormData.set('description', this.state.description);
         bodyFormData.set('image', this.state.image);
-        axios.defaults.headers.common['Authorization'] = localStorage.getItem('token');
+        axios.defaults.headers.common['Authorization'] = `Token ${localStorage.getItem('token')}`;
         axios({
             method: "post",
             url: "http://localhost:8000/api/thing/things/",

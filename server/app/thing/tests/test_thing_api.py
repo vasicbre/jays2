@@ -114,13 +114,14 @@ class PrivateThingApiTests(TestCase):
     def test_create_basic_thing(self):
         """Test creating thing"""
         payload = {
-            'title': 'Book1',
-            'description': 'Awesome book 1'
+            "title": "Book2",
+            "description": "Awesome book 2",
+            "tags": []
         }
 
         res = self.client.post(THINGS_URL, payload)
 
-        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(res, status.HTTP_201_CREATED)
         thing = Thing.objects.get(id=res.data['id'])
         for key in payload.keys():
             self.assertEqual(payload[key], getattr(thing, key))
@@ -133,7 +134,7 @@ class PrivateThingApiTests(TestCase):
         payload = {
             'title': 'Book1',
             'description': 'Awesome book 1',
-            'tags': [tag1.id, tag2.id],
+            'tags': [tag1.name, tag2.name],
         }
         res = self.client.post(THINGS_URL, payload)
 
@@ -198,26 +199,6 @@ class ThingImageUploadTests(TestCase):
 
     def tearDown(self):
         self.thing.image.delete()
-
-    def test_upload_image_to_thing(self):
-        """Test uploading an image to thing"""
-        url = image_upload_url(self.thing.id)
-        with tempfile.NamedTemporaryFile(suffix='.jpg') as ntf:
-            img = Image.new('RGB', (10, 10))
-            img.save(ntf, format='JPEG')
-            ntf.seek(0)
-            res = self.client.post(url, {'image': ntf}, format='multipart')
-
-        self.thing.refresh_from_db()
-        self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertIn('image', res.data)
-        self.assertTrue(os.path.exists(self.thing.image.path))
-
-    def test_upload_image_bad_request(self):
-        """Test uploading an invalid image"""
-        url = image_upload_url(self.thing.id)
-        res = self.client.post(url, {'image': 'notimage'}, format='multipart')
-        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_filter_things_by_tags(self):
         """Test returning things with specific tags"""

@@ -71,6 +71,7 @@ class ModelTests(TestCase):
             'region': 'Serbia',
             'bio': 'This is a test user account',
             'user_type': models.UserProfile.UserType.REGULAR,
+            'phone': '065123'
         }
 
         user = get_user_model().objects.create_user(
@@ -79,8 +80,13 @@ class ModelTests(TestCase):
             name=self.test_user_name
         )
 
-        user_profile = models.UserProfile.objects.create(user_id=user,
-                                                         **user_profile_dict)
+        user_profile = models.UserProfile.objects.filter(user_id=user).first()
+        user_profile.date_of_birth = user_profile_dict['date_of_birth']
+        user_profile.region = user_profile_dict['region']
+        user_profile.bio = user_profile_dict['bio']
+        user_profile.user_type = user_profile_dict['user_type']
+        user_profile.phone = user_profile_dict['phone']
+        user_profile.save()
 
         self.assertEqual(user_profile.date_of_birth,
                          user_profile_dict['date_of_birth'])
@@ -107,13 +113,3 @@ class ModelTests(TestCase):
         thing.tags.add(tag)
 
         self.assertEqual(str(thing), thing.title)
-
-    @patch('uuid.uuid4')
-    def test_thing_file_name_uuid(self, mock_uuid):
-        """Test that image is saved in the correct location"""
-        uuid = 'test-uuid'
-        mock_uuid.return_value = uuid
-        file_path = models.thing_image_file_path(None, 'myimage.jpg')
-
-        expected_path = f'uploads/thing/{uuid}.jpg'
-        self.assertEqual(file_path, expected_path)

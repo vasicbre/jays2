@@ -7,17 +7,18 @@ class Profile extends Component {
 
     mediaQuery = "(max-width: 450px)";
 
-    state = {
-        name: "",
-        email: "",
-        bio: "", 
-        date: "",
-        phone: "",
-        registration: true}
-
     constructor(props) {
         super(props);
-        this.state = { matches: window.matchMedia(this.mediaQuery).matches };
+        this.state = {
+            matches: window.matchMedia(this.mediaQuery).matches,
+            name: "",
+            email: "",
+            bio: "", 
+            date: "",
+            phone: "",
+            registration: false,
+            profile: true
+        };
     }
 
     componentDidMount() {
@@ -133,32 +134,66 @@ class Profile extends Component {
                 </div>;
     }
 
+    navTabClicked(e) {
+        let profile_elem = document.getElementById('profile-tab');
+        let item_elem = document.getElementById('item-tab');
+        if (e.target.id === 'profile-tab') {
+            profile_elem.classList.add('active');
+            item_elem.classList.remove('active');
+            this.setState({profile: true});
+        } else {
+            profile_elem.classList.remove('active');
+            item_elem.classList.add('active');
+            this.setState({profile: false});
+        }
+    }
+
+    navTabs() {
+        if (this.state.registration) return <div></div>
+        return <div>
+            <ul className="nav nav-tabs" onClick={this.navTabClicked.bind(this)}>
+                <li className="nav-item">
+                    <a id="profile-tab" className="nav-link active text-secondary" href="#">Moj Profil</a>
+                </li>
+                <li className="nav-item">
+                    <a id="item-tab" className="nav-link text-secondary" href="#">Moje objave</a>
+                </li>
+            </ul>
+        </div>
+    }
+
+    profileForm() {
+        if (!this.state.profile) return <div></div>;
+
+        return <form onSubmit={this.registerSubmit.bind(this)}>
+            <div className="form-group">
+                <label htmlFor="nameInput">Ime</label>
+                <input type="text" disabled className="form-control" id="nameInput" placeholder={this.state.name}/>
+            </div>
+            <div className="form-group">
+                <label htmlFor="bioInput">Opis</label>
+                <textarea type="text" className="form-control" id="bioInput" onChange={this.handleBioChange.bind(this)} placeholder="Opis" value={this.state.bio}/>
+            </div>
+            <div className="form-group">
+                <label htmlFor="emailInput">Email adresa</label>
+                <input type="email" disabled className="form-control" id="emailInput" aria-describedby="emailHelp" placeholder={this.state.email}/>
+            </div>
+            <div className="form-group">
+                <label htmlFor="dateInput">Datum rođenja</label>
+                <input type="date" className="form-control" id="dateInput" onChange={this.handleDateChange.bind(this)} value={this.state.date}/>
+            </div>
+            <div className="form-group">
+                <label htmlFor="phoneInput">Telefon</label>
+                <input type="text" className="form-control" id="phoneInput" onChange={this.handlePhoneChange.bind(this)} value={this.state.phone}/>
+            </div>
+            <button type="submit" className="btn btn-primary">Sačuvaj</button>
+        </form>
+    }
     render() {
         return <div className= {this.state.matches? "container w-100 mt-2" : "container w-50 mt-2" }>
             {this.registrationGreeting()}
-            <form onSubmit={this.registerSubmit.bind(this)}>
-                <div className="form-group">
-                    <label htmlFor="nameInput">Ime</label>
-                    <input type="text" disabled className="form-control" id="nameInput" placeholder={this.state.name}/>
-                </div>
-                <div className="form-group">
-                    <label htmlFor="bioInput">Opis</label>
-                    <textarea type="text" className="form-control" id="bioInput" onChange={this.handleBioChange.bind(this)} placeholder="Opis" value={this.state.bio}/>
-                </div>
-                <div className="form-group">
-                    <label htmlFor="emailInput">Email adresa</label>
-                    <input type="email" disabled className="form-control" id="emailInput" aria-describedby="emailHelp" placeholder={this.state.email}/>
-                </div>
-                <div className="form-group">
-                    <label htmlFor="dateInput">Datum rođenja</label>
-                    <input type="date" className="form-control" id="dateInput" onChange={this.handleDateChange.bind(this)} value={this.state.date}/>
-                </div>
-                <div className="form-group">
-                    <label htmlFor="phoneInput">Telefon</label>
-                    <input type="text" className="form-control" id="phoneInput" onChange={this.handlePhoneChange.bind(this)} value={this.state.phone}/>
-                </div>
-                <button type="submit" className="btn btn-primary">Sačuvaj</button>
-            </form>
+            {this.navTabs()}
+            {this.profileForm()}
         </div>
     }
 }
