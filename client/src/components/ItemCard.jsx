@@ -1,18 +1,22 @@
 import React, { Component } from 'react';
 import {withRouter} from 'react-router-dom';
 import { WithContext as ReactTags } from 'react-tag-input';
+import {Modal, Button} from 'bootstrap';
 
 class ItemCard extends Component {
 
     constructor(props) {
-        super(props)
+        super(props);
+        this.state = {
+            show: false
+        };
     }
     
     componentDidMount() {
     }
 
     getItemDetails = (id) => {
-        this.props.history.push('/details?id='+id);
+        //this.props.history.push('/details?id='+id);
     }
 
     tags = this.props.item.tags.map(obj => {
@@ -22,14 +26,19 @@ class ItemCard extends Component {
         }
     });
 
+    deleteItem(e) {
+        this.props.rm_callback(e, this.props.item.id);
+    }
+
     removeButton() {
         if (!this.props.mine) {
             return <div></div>
         }
-        return  <button type="button" className="close float-right" aria-label="Close">
+        return  <button type="button" className="close float-right" aria-label="Close" onClick={this.deleteItem.bind(this)}>
                 <span aria-hidden="true">&times;</span>
         </button>
     }
+
     render() {
         return <div className="col-md-4">
             <div className="card mt-1 mb-1" onClick={ ()=> this.getItemDetails(this.props.item.id) }>

@@ -67,6 +67,8 @@ class ThingViewSet(viewsets.ModelViewSet):
         """Return appropriate serializer class"""
         if self.action == 'retrieve':
             return serializers.ThingDetailSerializer
+        if self.action == 'delete':
+            return serializers.ThingDetailSerializer
         elif self.action == 'upload_image':
             return serializers.ThingImageSerializer
 
