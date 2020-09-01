@@ -64,6 +64,10 @@ class ThingViewSet(viewsets.ModelViewSet):
             tag_ids = self._params_to_ints(tags)
             queryset = queryset.filter(tags__id__in=tag_ids)
 
+        filterby = self.request.query_params.get('filterby', None)
+        if filterby is not None:
+            queryset = queryset.filter(tags__name=filterby)
+
         return queryset.filter(user=self.request.user)
 
     def get_serializer_class(self):
