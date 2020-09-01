@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {withRouter} from 'react-router-dom';
 import { WithContext as ReactTags } from 'react-tag-input';
 import {Modal, Button} from 'bootstrap';
+import '../Typeahead.scss';
 
 class ItemCard extends Component {
 

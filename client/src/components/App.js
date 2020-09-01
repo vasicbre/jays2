@@ -6,6 +6,8 @@ import Login from './Login.jsx';
 import Register from './Register.jsx';
 import CreateItem from './CreateItem.jsx';
 import Profile from './Profile';
+import SearchPage from './SearchPage';
+import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import { BrowserRouter, Route } from 'react-router-dom';
 
@@ -21,6 +23,7 @@ const App = props => {
           <Route path="/register" component={Register} />
           <Route path="/create" component={CreateItem} />
           <Route path="/profile" component={Profile} />
+          <Route path="/search" component={SearchPage} />
           </div>
       </div>
     </BrowserRouter>

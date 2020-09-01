@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import {withRouter} from 'react-router-dom';
+import { unstable_renderSubtreeIntoContainer } from 'react-dom';
+import { useLocation } from 'react-router-dom'
+import { Typeahead } from 'react-bootstrap-typeahead'; // ES2015
 
 class Header extends Component {
 
@@ -50,6 +53,8 @@ class Header extends Component {
                 localStorage.removeItem('token');
             }
             this.props.history.push('/login');
+        } else if (e.target.id == 'search') {
+            this.props.history.push('/search');
         }
         this.navbarRef.current.querySelector('#toggler').click();
     }
@@ -70,11 +75,14 @@ class Header extends Component {
                             <a id="profile" className="nav-link" href="#">Profil</a>
                         </li>
                         <li className="nav-item">
+                            <a id="search" className="nav-link" href="#">Pretraga</a>
+                        </li>
+                        <li className="nav-item">
                             <a id="login" className="nav-link" href="#">{localStorage.getItem('token') !== null? 'Odjava' : 'Prijava'}</a>
                         </li>
                     </ul>
                     <form className="form-inline my-2 my-lg-0">
-                    <input className="form-control mr-sm-2" type="search" placeholder="Pretraga" aria-label="Search"/>
+                    {/* <input className="form-control mr-sm-2" type="search" id="search-bar" placeholder="Pretraga" aria-label="Search" onFocus={this.onSearchFocus.bind(this)}/> */}
                     </form>
                 </div>
         </nav>
