@@ -27,10 +27,18 @@ class ItemList extends Component {
     }
 
     fetchItems = () => {
+        console.log('fetch');
         axios.defaults.headers.common['Authorization'] = `Token ${localStorage.getItem('token')}`;
+        let url_suffix = "";
+        if (this.props.tags.length > 0) {
+            url_suffix = "?filterby=" + this.props.tags.reduce(
+                (acc, curr)=> {
+                    acc += curr + ',';
+                });
+        }
         axios({
             method: "get",
-            url: "http://localhost:8000/api/thing/things",
+            url: "http://localhost:8000/api/thing/things" + url_suffix,
             })
             .then(resp => {
                 console.log(resp.data);
@@ -44,6 +52,13 @@ class ItemList extends Component {
                 console.log(err);
             });
 
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props.tags != prevProps.tags) {
+            this.setState({tags: this.props.tags});
+            this.fetchItems();
+        }
     }
 
     handleClickOpen(e, id) {

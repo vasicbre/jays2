@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Login from './Login';
 import Tags from './Tags';
+import ItemList from './ItemList';
 
 import { Typeahead } from 'react-bootstrap-typeahead'; // ES2015
 import axios from 'axios';
@@ -8,7 +9,8 @@ import axios from 'axios';
 class SearchPage extends Component {
 
     state = {
-        options: []
+        options: [],
+        applied_tags: []
     }
 
     constructor(props) {
@@ -27,12 +29,15 @@ class SearchPage extends Component {
                         return obj.name
                     });
                 this.setState({options: adjustedData});
-                console.log('tags fetched');
             })
             .catch(err => {
                 alert('Neuspešna akcija, pokušajte ponovo');
                 console.log(err);
             });
+    }
+
+    onInputChange(selected) {
+        this.setState({applied_tags: selected});
     }
 
     render() {
@@ -51,10 +56,10 @@ class SearchPage extends Component {
                             multiple
                             options={this.state.options}
                             placeholder="Choose a state..."
+                            onChange={this.onInputChange.bind(this)}
                         />
-                    <Tags />
                 </div>
-                {/* <ItemList /> */}
+                <ItemList tags = {this.state.applied_tags}/>
             </div>
         }
     }
