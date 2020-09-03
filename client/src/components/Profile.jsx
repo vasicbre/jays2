@@ -42,7 +42,6 @@ class Profile extends Component {
             url: "http://localhost:8000/api/user/profile",
             })
             .then(resp => {
-                console.log(resp);
                 this.setState({
                     email: resp.data.user.email,
                     name: resp.data.user.name,

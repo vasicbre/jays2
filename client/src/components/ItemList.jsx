@@ -27,7 +27,7 @@ class ItemList extends Component {
     }
 
     fetchItems = () => {
-        console.log('fetch');
+
         axios.defaults.headers.common['Authorization'] = `Token ${localStorage.getItem('token')}`;
         let url_suffix = "";
         if (this.props.tags.length > 0) {
@@ -41,7 +41,6 @@ class ItemList extends Component {
             url: "http://localhost:8000/api/thing/things" + url_suffix,
             })
             .then(resp => {
-                console.log(resp.data);
                 return resp.data;
             })
             .then(items => {

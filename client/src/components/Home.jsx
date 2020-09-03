@@ -12,7 +12,7 @@ class Home extends Component {
             return (<Login />);
         } else {
             return <div>
-                <ItemList />
+                <ItemList tags = {[]}/>
                 <AddIcon />
             </div>
         }
