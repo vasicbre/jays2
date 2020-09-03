@@ -158,6 +158,7 @@ AWS_S3_REGION_NAME = 'eu-central-1'
 AWS_DEFAULT_ACL = None
 
 CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_WHITELIST = [
-    'http://localhost:3001',
-]
+# CORS_ORIGIN_WHITELIST = [
+#     'http://localhost:3001',
+# ]
+CORS_ORIGIN_ALLOW_ALL = True
