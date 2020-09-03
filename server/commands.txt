@@ -18,3 +18,10 @@ Start app server in docker:
 
 Run create superuser command against running server in docker:
     docker-compose run --rm app sh -c "python manage.py createsuperuser"
+
+{
+    "title": "bbb",
+    "tags": [{"name":"bbb"}],
+    "description": "asd",
+    "image": null
+}

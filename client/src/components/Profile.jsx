@@ -192,7 +192,7 @@ class Profile extends Component {
     myItems() {
         if (this.state.profile) return <div></div>;
         return <div>
-                <ItemList mine={true}/>
+                <ItemList mine={true} tags={[]}/>
             </div>
     }
 

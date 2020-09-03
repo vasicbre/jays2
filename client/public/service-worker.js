@@ -2,6 +2,7 @@ var CACHE_NAME = 'my-site-cache-v1';
 var urlsToCache = [
     '/',
     '/api/thing/things',
+    '/api/user/profile',
     'static/js/bundle.js',
     'static/js/1.chunk.js',
     'static/js/main.chunk.js'
@@ -57,11 +58,15 @@ self.addEventListener('fetch', function(event) {
             return response;
           }
   
-          return fetch(event.request).then(
+          return fetch(event.request, {
+              headers: {
+                  'Authorization': 'Token 3070430694567871a7dca57ce2ce0540f6e8380c'
+              }
+          }).then(
             function(response) {
-              console.log('fetch response');
+              console.log(response);
               // Check if we received a valid response
-              if(!response || response.status !== 200 || response.type !== 'basic') {
+              if(!response || response.status !== 200 || response.type !== 'cors') {
                   console.log('response failed');
                   return response;
               }

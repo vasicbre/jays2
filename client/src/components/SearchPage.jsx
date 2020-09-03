@@ -55,7 +55,7 @@ class SearchPage extends Component {
                             labelKey="name"
                             multiple
                             options={this.state.options}
-                            placeholder="Choose a state..."
+                            placeholder="Pretraga..."
                             onChange={this.onInputChange.bind(this)}
                         />
                 </div>

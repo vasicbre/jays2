@@ -2,6 +2,8 @@ from rest_framework import serializers
 
 from core.models import Tag, Thing
 
+from user.serializers import UserSerializer, UserProfileSerializer
+
 import logging
 
 
@@ -45,6 +47,12 @@ class ThingSerializer(serializers.ModelSerializer):
 class ThingDetailSerializer(ThingSerializer):
     """Serialize a thing detail"""
     tags = TagSerializer(many=True, read_only=True)
+    user = UserSerializer()
+
+    class Meta:
+        model = Thing
+        fields = ('id', 'title', 'tags', 'description', 'image', 'user')
+        read_only_fields = ('id',)
 
 
 class ThingImageSerializer(serializers.ModelSerializer):

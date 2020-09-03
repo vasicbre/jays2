@@ -17,7 +17,8 @@ class ItemCard extends Component {
     }
 
     getItemDetails = (id) => {
-        //this.props.history.push('/details?id='+id);
+        console.log('clicked')
+        this.props.history.push('/details?id='+id);
     }
 
     tags = this.props.item.tags.map(obj => {
