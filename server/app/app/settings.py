@@ -25,7 +25,7 @@ SECRET_KEY = '8#n7y5lxld6uy8p!&zdqceb6ln&9owh1i1q4545q9%yb53@ns+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 LOGGING = {
     'version': 1,
