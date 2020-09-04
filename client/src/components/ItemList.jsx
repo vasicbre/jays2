@@ -38,7 +38,7 @@ class ItemList extends Component {
         }
         axios({
             method: "get",
-            url: "http://localhost:8000/api/thing/things" + url_suffix,
+            url: "http://ec2-54-93-229-96.eu-central-1.compute.amazonaws.com:8000/api/thing/things" + url_suffix,
             })
             .then(resp => {
                 return resp.data;
@@ -73,7 +73,7 @@ class ItemList extends Component {
 
     async handleDelete(e) {
         let res = await axios.delete(
-            "http://localhost:8000/api/thing/things/"+this.state.id, 
+            "http://ec2-54-93-229-96.eu-central-1.compute.amazonaws.com:8000/api/thing/things/"+this.state.id, 
             {
                 headers: {
                     Authorization: `Token ${localStorage.getItem('token')}` 

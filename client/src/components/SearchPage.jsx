@@ -22,7 +22,7 @@ class SearchPage extends Component {
         axios.defaults.headers.common['Authorization'] = `Token ${localStorage.getItem('token')}`;
         axios({
             method: "get",
-            url: "http://localhost:8000/api/thing/tags",
+            url: "http://ec2-54-93-229-96.eu-central-1.compute.amazonaws.com:8000/api/thing/tags",
             })
             .then(resp => {
                 const adjustedData = resp.data.map(obj => {

@@ -30,7 +30,7 @@ class ItemDetails extends Component {
         axios.defaults.headers.common['Authorization'] = `Token ${localStorage.getItem('token')}`;
         axios({
             method: "get",
-            url: "http://localhost:8000/api/user/profile",
+            url: "http://ec2-54-93-229-96.eu-central-1.compute.amazonaws.com:8000/api/user/profile",
             })
             .then(resp => {
                 this.setState({
@@ -52,7 +52,7 @@ class ItemDetails extends Component {
         axios.defaults.headers.common['Authorization'] = `Token ${localStorage.getItem('token')}`;
         axios({
             method: "get",
-            url: "http://localhost:8000/api/thing/things/" + q.id,
+            url: "http://ec2-54-93-229-96.eu-central-1.compute.amazonaws.com:8000/api/thing/things/" + q.id,
             })
             .then(resp => {
                 console.log(resp.data)

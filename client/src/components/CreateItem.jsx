@@ -39,7 +39,7 @@ class CreateItem extends Component {
         axios.defaults.headers.common['Authorization'] = `Token ${localStorage.getItem('token')}`;
         axios({
             method: "get",
-            url: "http://localhost:8000/api/thing/tags",
+            url: "http://ec2-54-93-229-96.eu-central-1.compute.amazonaws.com:8000/api/thing/tags",
             })
             .then(resp => {
                 const adjustedData = resp.data.map(obj => {
@@ -113,7 +113,7 @@ class CreateItem extends Component {
             // }
           };
       
-          fetch('http://localhost:8000/api/thing/things/', options)
+          fetch('http://ec2-54-93-229-96.eu-central-1.compute.amazonaws.com:8000/api/thing/things/', options)
           .then(response => {
               console.log(response);
           })
@@ -152,7 +152,7 @@ class CreateItem extends Component {
         axios.defaults.headers.common['Authorization'] = `Token ${localStorage.getItem('token')}`;
         axios({
             method: "post",
-            url: "http://localhost:8000/api/thing/things/",
+            url: "http://ec2-54-93-229-96.eu-central-1.compute.amazonaws.com:8000/api/thing/things/",
             data: JSON.stringify(data),
             headers: {'Content-Type': 'application/json' }
         })
@@ -162,7 +162,7 @@ class CreateItem extends Component {
             form_data.set('image', this.state.image);
             return axios({
                 method: "patch",
-                url: "http://localhost:8000/api/thing/things/" + response.data.id + "/",
+                url: "http://ec2-54-93-229-96.eu-central-1.compute.amazonaws.com:8000/api/thing/things/" + response.data.id + "/",
                 data: form_data,
                 headers: {'Content-Type': 'multipart/form-data' }
             });

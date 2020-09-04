@@ -25,14 +25,14 @@ class Login extends Component {
         bodyFormData.set('password', this.state.password);
         axios({
             method: "post",
-            url: "http://localhost:8000/api/user/token/",
+            url: "http://ec2-54-93-229-96.eu-central-1.compute.amazonaws.com:8000/api/user/token/",
             data: bodyFormData,
             headers: {'Content-Type': 'multipart/form-data' }
             })
            .then(response => {
                 localStorage.setItem('token', response.data.token);
                 return axios.get(
-                    "http://localhost:8000/api/user/profile/",
+                    "http://ec2-54-93-229-96.eu-central-1.compute.amazonaws.com:8000/api/user/profile/",
                     { 'headers': 
                         { 
                             'Authorization': `Token ${response.data.token}` 

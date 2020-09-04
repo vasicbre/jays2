@@ -62,7 +62,7 @@ class Register extends Component {
             bodyFormData.set('password', this.state.password1);
             axios({
                 method: "post",
-                url: "http://localhost:8000/api/user/create/",
+                url: "http://ec2-54-93-229-96.eu-central-1.compute.amazonaws.com:8000/api/user/create/",
                 data: bodyFormData,
                 headers: {'Content-Type': 'multipart/form-data' }
                 })
